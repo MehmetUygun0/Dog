@@ -1,0 +1,53 @@
+﻿@model KopekIlan
+<form method="post">
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h3 class="text-primary">Create Advert</h3>
+		</div>
+		<div asp-validation-summary="All"></div>
+		<div class="mb-3 row">
+			<label asp-for="DogName"></label>
+			<input asp-for="DogName" type="text" class="form-control" />
+			<span asp-validation-for="DogName" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3 row">
+			<label asp-for="DogAge"></label>
+			<input asp-for="DogAge" type="text" class="form-control" />
+			<span asp-validation-for="DogAge" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3 row">
+			<label asp-for="DogType"></label>
+			<input asp-for="DogType" type="text" class="form-control" />
+			<span asp-validation-for="DogType" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3 row">
+			<label asp-for="DogFeatures"></label>
+			<input asp-for="DogFeatures" type="text" class="form-control" />
+			<span asp-validation-for="DogFeatures" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3 row">
+			<label asp-for="DogStartTime"></label>
+			<input asp-for="DogStartTime" type="date" class="form-control" />
+			<span asp-validation-for="DogStartTime" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3 row">
+			<label asp-for="DogEndTime"></label>
+			<input asp-for="DogEndTime" type="date" class="form-control" />
+			<span asp-validation-for="DogEndTime" class="text-danger"></span>
+		</div>
+
+		<div class="row">
+			<div class="col-6">
+				<button type="submit" class="btn btn-primary form-control">Create</button>
+			</div>
+			<div class="col-6">
+				<a asp-controller="Home" asp-action="Index" class="btn btn-secondary form-control">İlanlara git</a>
+			</div>
+		</div>
+	</div>
+</form>

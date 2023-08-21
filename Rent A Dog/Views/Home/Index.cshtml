@@ -1,0 +1,44 @@
+﻿@model IEnumerable<KopekIlan>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="text-center">
+	<div class="row pb-3">
+		@foreach (var item in Model)
+		{
+			<div class="col-lg-3 col-sm-6">
+				<div class="row p-2">
+					<div class="col-12 p-1">
+						<div class="card border-0 p-3 shadow border-top border-5 rounded">
+							@* @if (product.ProductImages != null && product.ProductImages.Count() > 0)
+						{
+						<img src="@product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" />
+						}
+						else
+						{
+
+						} *@
+							<img src="https://placehold.co/500x600/png" class="card-img-top rounded" />
+							<div class="card-body pb-0">
+								<div class="pl-1">
+									<p class="card-title h4 text-dark opacity-75 text-uppercase text-center">@item.DogName</p>
+									<p class="card-title h5 text-dark opacity-75 text-uppercase text-center"><b>@item.DogAge</b> years old</p>
+								</div>
+								<div class="pl-1">
+									<p class=" h5 text-dark text-opacity-75 text-center mb-0">Dog Type : <span>@item.DogType</span></p>
+								</div>
+								<div class="pl-1">
+									<p class="card-title text-warning text-center">Date : <b>@item.DogStartTime   @item.DogEndTime</b></p>
+								</div>
+							</div>
+							<div class="pl-1">
+								<a asp-controller="Kopek" asp-action="Details" asp-route-Id="@item.Id" class="btn btn-primary bg-gradient border-0 form-control">Details</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+
+</div>
