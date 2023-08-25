@@ -24,5 +24,7 @@ namespace Rent_A_Dog.Models
         public DateTime DogEndTime { get; set; }
         public string Email { get; set; }
         public string? ImgUrl { get; set; }
-    }
+		public int Views { get; set; }
+        public bool TeklifGelmismi { get; set; }
+	}
 }

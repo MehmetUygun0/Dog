@@ -18,5 +18,6 @@ namespace Rent_A_Dog.Models
 		public string Email { get; set; }
         public string IlanEmail { get; set; }
         public bool Enable { get; set; }
+		public int IlanId { get; set; }
 	}
 }

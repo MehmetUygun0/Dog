@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Rent_A_Dog.Data;
 using Rent_A_Dog.Models;
 using System.Diagnostics;
@@ -17,13 +18,32 @@ namespace Rent_A_Dog.Controllers
             sql_İliskisi = _sql_İliskisi;
         }
 
-        public IActionResult Index()
+        /// <summary>
+        /// Kullanıcı ilk girdiğinde boşverilerin olduğu sayfayı hazırlar
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<KopekIlan> kopekIlans = sql_İliskisi.KopekIlan.ToList();
-            return View(kopekIlans);
+            var ilanlar =await sql_İliskisi.KopekIlan.ToListAsync();
+			return View(new Filtre()
+			{
+				kopekIlan = ilanlar,
+				FiltreEndTime = ilanlar.Max(s => s.DogEndTime),
+				FiltreStartTime = ilanlar.Min(s => s.DogStartTime),
+                MaxDate = ilanlar.Max(s => s.DogEndTime),
+                MinDate = ilanlar.Min(s => s.DogStartTime)
+			});
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+		public async Task<IActionResult> Index(Filtre filtre)
+		{
+			filtre.kopekIlan = await sql_İliskisi.KopekIlan.Where(u=>u.DogStartTime>=filtre.FiltreStartTime 
+            && u.DogEndTime<=filtre.FiltreEndTime
+            && (u.DogType == filtre.FiltreDogType || string.IsNullOrWhiteSpace(filtre.FiltreDogType)) ).ToListAsync();
+			return View(filtre);
+		}
+		public IActionResult Privacy()
         {
             return View();
         }

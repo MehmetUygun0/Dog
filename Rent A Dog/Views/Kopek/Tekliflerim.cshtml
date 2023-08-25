@@ -1,34 +1,68 @@
-﻿@model IEnumerable<Teklif>
+﻿@model IlanVerDTO
+
 
 <div class="row pb-3">
-@foreach (var item in Model)
-{
-	<div class="col-lg-3 col-sm-6">
-		<div class="row p-2">
-			<div class="col-12 p-1">
-				<div class="card border-0 p-3 shadow border-top border-5 rounded">
-					<div class="card-body pb-0">
-						<div class="pl-1">
-							<p class="card-title h4 text-dark opacity-75 text-uppercase text-center">Fiyat : @item.TeklifFİyat</p>
-							<p class="card-title h5 text-dark opacity-75 text-uppercase text-center">Not : <b>@item.Not</b></p>
+
+	@{
+		int x = 0;
+		int y = 0;
+		@foreach (var item in Model.ReferansIlanLİst)
+		{
+			<div class="col-lg-3 col-sm-6">
+				<div class="row p-2">
+					<div class="col-12 p-1">
+						<div class="card border-0 p-3 shadow border-top border-5 rounded">
+							<img src="https://placehold.co/500x200/png" class="card-img-top rounded" />
+							<div class="card-body pb-0">
+								<div class="pl-1">
+									<p class="card-title h4 text-dark opacity-75 text-uppercase text-center">@item.DogName</p>
+									<p class="card-title h5 text-dark opacity-75 text-uppercase text-center"><b>@item.DogAge</b> years old</p>
+								</div>
+								<div class="pl-1">
+									<p class=" h5 text-dark text-opacity-75 text-center mb-0">Dog Type : <span>@item.DogType</span></p>
+								</div>
+								<div class="pl-1">
+									<p class="card-title text-warning text-center">Date : <b>@item.DogStartTime   @item.DogEndTime</b></p>
+								</div>
+							</div>
+							<div class="pl-1">
+								<a asp-controller="Kopek" asp-action="Details" asp-route-Id="@item.Id" class="btn btn-primary bg-gradient border-0 form-control">Details</a>
+							</div>
 						</div>
-						<div class="pl-1">
-							<p class=" h5 text-dark text-opacity-75 text-center mb-0">Phone NUmber : <span>@item.PhoneNumber</span></p>
-						</div>
-					</div>
-					<div class="pl-1">
-						@if (item.Enable)
+						@foreach (var nesne in Model.TeklifIlanLİst)
 						{
-							<a asp-controller="Kopek" asp-action="TeklifEnabled" asp-route-Id="@item.Id" class="btn btn-success bg-gradient border-0 form-control">Kabul Edildi</a>
-						}
-						else
-						{
-							<a asp-controller="Kopek" asp-action="DeleteTeklif" asp-route-Id="@item.Id" class="btn btn-danger bg-gradient border-0 form-control">Delete</a>
+							if (x==y)
+							{
+								<div class="card border-0 p-3 shadow rounded">
+									<div class="card-body pb-0">
+										<div class="pl-1">
+											<p class="card-title h4 text-dark opacity-75 text-uppercase text-center">Fiyat : @nesne.TeklifFİyat</p>
+											<p class="card-title h5 text-dark opacity-75 text-uppercase text-center">Not : <b>@nesne.Not</b></p>
+										</div>
+										<div class="pl-1">
+											<p class=" h5 text-dark text-opacity-75 text-center mb-0">Phone NUmber : <span>@nesne.PhoneNumber</span></p>
+										</div>
+									</div>
+									<div class="pl-1">
+										@if (nesne.Enable)
+										{
+											<label class="btn btn-success bg-gradient border-0 form-control">Kabul Edildi</label>
+										}
+										else
+										{
+											<a asp-controller="Kopek" asp-action="DeleteTeklif" asp-route-Id="@item.Id" class="btn btn-danger bg-gradient border-0 form-control">Delete</a>
+										}
+									</div>
+								</div>
+							}
+							y++;
 						}
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-}
+			x++;
+			y = 0;
+		}
+	}
+
 </div>

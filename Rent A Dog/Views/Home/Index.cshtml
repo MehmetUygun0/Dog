@@ -1,10 +1,43 @@
-﻿@model IEnumerable<KopekIlan>
+﻿@using System.Collections;
+@model Filtre
 @{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
-<div class="text-center">
+<form method="post">
+	@Html.HiddenFor(m => m.MinDate)
+	@Html.HiddenFor(m => m.MaxDate)
+	<label>Başlangıç Tarihi : </label>
+	<input asp-for="FiltreStartTime" type="date" value="@Model.FiltreStartTime.ToString("yyyy-MM-dd")" max="@Model.MaxDate.ToString("yyyy-MM-dd")" min="@Model.MinDate.ToString("yyyy-MM-dd")" />
+	<label>Bitiş Tarihi : </label>
+	<input asp-for="FiltreEndTime" type="date" value="@Model.FiltreEndTime.ToString("yyyy-MM-dd")" max="@Model.MaxDate.ToString("yyyy-MM-dd")" min="@Model.MinDate.ToString("yyyy-MM-dd")" />
+	<label>Köpek Cinsi : </label>
+	<select asp-for="FiltreDogType">
+		@if (string.IsNullOrWhiteSpace( Model.FiltreDogType) )
+		{
+			<option value="" selected>Tümü</option>
+		}else
+		{
+			<option value="">Tümü</option>
+		}
+		
+
+		@foreach (var item in Model.kopekIlan.Select(s => s.DogType).Distinct())
+		{
+			if (Model.FiltreDogType == item)
+			{
+				<option value="@item" selected>@item</option>
+			}
+			else
+			{
+				<option value="@item">@item</option>
+			}
+		}
+	</select>
+	<button type="submit" class="btn btn-primary bg-gradient border-0">Uygula</button>
+</form>
+<div class="">
 	<div class="row pb-3">
-		@foreach (var item in Model)
+		@foreach (var item in Model.kopekIlan)
 		{
 			<div class="col-lg-3 col-sm-6">
 				<div class="row p-2">
@@ -21,7 +54,7 @@
 							<img src="https://placehold.co/500x600/png" class="card-img-top rounded" />
 							<div class="card-body pb-0">
 								<div class="pl-1">
-									<p class="card-title h4 text-dark opacity-75 text-uppercase text-center">@item.DogName</p>
+									<p class="card-title h4 text-dark text-uppercase text-center">@item.DogName</p>
 									<p class="card-title h5 text-dark opacity-75 text-uppercase text-center"><b>@item.DogAge</b> years old</p>
 								</div>
 								<div class="pl-1">

@@ -59,6 +59,9 @@ namespace Rent_A_Dog.Controllers
                 return NotFound();
             }
             kopekIlan = sql_İliskisi.KopekIlan.Find(id);
+            kopekIlan.Views++;
+            sql_İliskisi.KopekIlan.Update(kopekIlan);
+            sql_İliskisi.SaveChanges();
             if (kopekIlan == null)
             {
                 return NotFound();
@@ -89,17 +92,30 @@ namespace Rent_A_Dog.Controllers
         [HttpPost, ValidateAntiForgeryToken]
 		public IActionResult Teklif(IlanVerDTO ilan) //Update
 		{
-            ilan.TeklifIlan.Email = User.Identity.Name;
+            ilan.TeklifIlan.IlanId = ilan.ReferansIlan.Id;
+			ilan.TeklifIlan.Email = User.Identity.Name;
             ilan.TeklifIlan.IlanEmail=ilan.ReferansIlan.Email;
             sql_İliskisi.Teklif.Add(ilan.TeklifIlan);
             sql_İliskisi.SaveChanges();
-			return RedirectToAction("Index","Home");
+			return RedirectToAction("Tekliflerim","Kopek");
 		}
 
 		public IActionResult Tekliflerim() //Update
         {
-            IEnumerable<Teklif> tekliflerim = sql_İliskisi.Teklif.Where(u => u.Email == User.Identity.Name).ToList();
-            return View(tekliflerim);
+			IEnumerable<Teklif> tekliflerim = sql_İliskisi.Teklif.Where(u => u.Email == User.Identity.Name).ToList();
+            List<KopekIlan> kopekIlans=new List<KopekIlan>();
+			KopekIlan kopekIlan =new KopekIlan();
+			foreach (var item in tekliflerim)
+            {
+                kopekIlan = sql_İliskisi.KopekIlan.Find(item.IlanId);
+                kopekIlans.Add(kopekIlan);
+            }
+
+			return View(new IlanVerDTO()
+            {
+				TeklifIlanLİst = sql_İliskisi.Teklif.Where(u => u.Email == User.Identity.Name).ToList(),
+                ReferansIlanLİst=kopekIlans
+			});
         }
 
 		public IActionResult DeleteTeklif(int id)
@@ -113,13 +129,26 @@ namespace Rent_A_Dog.Controllers
 		public IActionResult GelenTeklifler()
         {
 			IEnumerable<Teklif> teklifler = sql_İliskisi.Teklif.Where(u => u.IlanEmail == User.Identity.Name).ToList();
-			return View(teklifler);
+            //return View(teklifler);
+            IlanVerDTO ılanVerDTO = new IlanVerDTO();
+            ılanVerDTO.TeklifIlanLİst = sql_İliskisi.Teklif.Where(u => u.IlanEmail == User.Identity.Name).ToList();
+			List<KopekIlan> kopekIlans = new List<KopekIlan>();
+			foreach (var item in ılanVerDTO.TeklifIlanLİst)
+            {
+                ılanVerDTO.ReferansIlan = sql_İliskisi.KopekIlan.Find(item.IlanId);
+                kopekIlans.Add(ılanVerDTO.ReferansIlan);
+            }
+            ılanVerDTO.ReferansIlanLİst = kopekIlans;
+            return View(ılanVerDTO);
+
 		}
-        public IActionResult TeklifEnabled(int id)
+		public IActionResult TeklifEnabled(int id)
         {
 			Teklif obj = sql_İliskisi.Teklif.Find(id);
-			obj.Enable = true;
-            sql_İliskisi.Update(obj);
+            if (obj.Enable) obj.Enable = false;
+            else obj.Enable = true;
+			
+			sql_İliskisi.Update(obj);
             sql_İliskisi.SaveChanges();
 			return RedirectToAction("GelenTeklifler", "Kopek");
 		}

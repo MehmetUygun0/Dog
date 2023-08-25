@@ -1,5 +1,5 @@
 ﻿@model KopekIlan
-<form method="post">
+<form method="post" enctype="multipart/form-data">
 	<div class="border p-3 mt-4">
 		<div class="row pb-2">
 			<h3 class="text-primary">Create Advert</h3>
@@ -39,6 +39,11 @@
 			<label asp-for="DogEndTime"></label>
 			<input asp-for="DogEndTime" type="date" class="form-control" />
 			<span asp-validation-for="DogEndTime" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3 row">
+			<label asp-for="ImgUrl"></label>
+			<input asp-for="ImgUrl" type="file" class="form-control" />
 		</div>
 
 		<div class="row">
